@@ -852,42 +852,29 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* 微信分享提示 */
-        .wechat-tip {
+        /* 音频加载状态 */
+        .audio-status {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(230, 57, 70, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            z-index: 100;
             display: none;
-        }
-        
-        .wechat-tip img {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 20px;
-        }
-        
-        .wechat-tip p {
-            color: white;
-            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 90%;
             text-align: center;
-            max-width: 80%;
         }
         
-        .close-tip {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
+        .audio-status.show {
+            display: block;
         }
     </style>
 </head>
@@ -898,19 +885,14 @@
         <div class="loading-text">加载中，请稍候...</div>
     </div>
     
-    <!-- 微信分享提示 -->
-    <div class="wechat-tip" id="wechatTip">
-        <div class="close-tip" id="closeTip">×</div>
-        <p>点击右上角</p>
-        <p>选择"在浏览器打开"</p>
-        <p>获得最佳体验</p>
-    </div>
+    <!-- 音频状态提示 -->
+    <div class="audio-status" id="audioStatus"></div>
     
     <!-- 音乐控制面板 -->
     <div class="music-player" id="musicPlayer">
         <div class="music-info">
-            <div class="music-title" id="musicTitle">圣诞约会音乐</div>
-            <div class="music-subtitle" id="musicSubtitle">温馨圣诞背景音乐</div>
+            <div class="music-title" id="musicTitle">圣诞音乐</div>
+            <div class="music-subtitle" id="musicSubtitle">点击播放</div>
         </div>
         <button class="music-btn" id="playPauseBtn">
             <i class="fas fa-play"></i>
@@ -1049,35 +1031,8 @@
     
     <!-- 闪烁的星星容器 -->
     <div class="stars" id="stars"></div>
-    
-    <!-- 音频元素 -->
-    <audio id="backgroundMusic" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-christmas-magic-1117.mp3" type="audio/mpeg">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-christmas-magic-1117.mp3" type="audio/ogg">
-        您的浏览器不支持音频元素。
-    </audio>
 
     <script>
-        // 检测是否在微信中打开
-        function isWeChatBrowser() {
-            const ua = navigator.userAgent.toLowerCase();
-            return ua.indexOf('micromessenger') !== -1;
-        }
-        
-        // 显示微信提示
-        function showWeChatTip() {
-            if (isWeChatBrowser()) {
-                setTimeout(() => {
-                    document.getElementById('wechatTip').style.display = 'flex';
-                }, 2000);
-            }
-        }
-        
-        // 关闭微信提示
-        document.getElementById('closeTip').addEventListener('click', function() {
-            document.getElementById('wechatTip').style.display = 'none';
-        });
-        
         // 获取所有步骤元素
         const steps = document.querySelectorAll('.step');
         const stepDots = document.querySelectorAll('.step-dot');
@@ -1087,75 +1042,220 @@
         let currentStep = 1;
         let isScrolling = false;
         
-        // 初始化音乐播放器
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const musicPlayer = document.getElementById('musicPlayer');
-        const musicTitle = document.getElementById('musicTitle');
-        const musicSubtitle = document.getElementById('musicSubtitle');
+        // 音频相关变量
+        let audio = null;
+        let isAudioPlaying = false;
+        let audioLoaded = false;
+        let userInteracted = false;
         
-        // 初始化音乐播放器
-        function initMusicPlayer() {
-            // 设置初始音量
-            backgroundMusic.volume = 0.5;
+        // 音频源 - 使用更可靠的音频源
+        const audioSources = [
+            "https://downsc.chinaz.net/Files/DownLoad/sound1/202211/y1365.mp3",
+            "https://assets.mixkit.co/music/preview/mixkit-a-christmas-carol-1115.mp3"
+        ];
+        
+        // 显示音频状态
+        function showAudioStatus(message, type = 'info') {
+            const audioStatus = document.getElementById('audioStatus');
+            audioStatus.textContent = message;
+            audioStatus.className = 'audio-status';
             
-            // 播放/暂停按钮事件
-            playPauseBtn.addEventListener('click', toggleMusic);
+            // 根据类型设置样式
+            if (type === 'success') {
+                audioStatus.style.background = 'rgba(42, 157, 143, 0.9)';
+            } else if (type === 'error') {
+                audioStatus.style.background = 'rgba(230, 57, 70, 0.9)';
+            } else {
+                audioStatus.style.background = 'rgba(29, 53, 87, 0.9)';
+            }
             
-            // 当音乐开始播放时更新按钮
-            backgroundMusic.addEventListener('play', function() {
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                musicTitle.textContent = "圣诞约会音乐";
-                musicSubtitle.textContent = "正在播放";
-                musicPlayer.style.background = "rgba(230, 57, 70, 0.25)";
-            });
+            audioStatus.classList.add('show');
             
-            // 当音乐暂停时更新按钮
-            backgroundMusic.addEventListener('pause', function() {
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                musicTitle.textContent = "圣诞约会音乐";
-                musicSubtitle.textContent = "已暂停";
-                musicPlayer.style.background = "rgba(255, 255, 255, 0.15)";
-            });
-            
-            // 尝试自动播放音乐（可能需要用户交互）
+            // 3秒后自动隐藏
             setTimeout(() => {
-                const playPromise = backgroundMusic.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("自动播放被阻止，需要用户交互");
-                        musicTitle.textContent = "点击播放音乐";
-                        musicSubtitle.textContent = "需要用户交互";
-                    });
-                }
-            }, 1000);
-            
-            // 点击页面任意位置尝试播放音乐
-            document.addEventListener('click', function initMusicOnClick() {
-                const playPromise = backgroundMusic.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("用户交互后仍无法播放");
-                    });
-                }
-                // 移除事件监听器，避免重复尝试
-                document.removeEventListener('click', initMusicOnClick);
-            }, { once: true });
+                audioStatus.classList.remove('show');
+            }, 3000);
         }
         
-        // 切换音乐播放/暂停
-        function toggleMusic() {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play();
+        // 初始化音频
+        function initAudio() {
+            // 创建音频元素
+            audio = new Audio();
+            audio.loop = true;
+            audio.volume = 0.5;
+            audio.preload = 'auto';
+            
+            // 设置第一个音频源
+            let currentSourceIndex = 0;
+            audio.src = audioSources[currentSourceIndex];
+            
+            // 音频加载成功
+            audio.addEventListener('canplaythrough', function() {
+                console.log('音频可以播放了');
+                audioLoaded = true;
+                updateMusicUI(false);
+            });
+            
+            // 音频加载错误
+            audio.addEventListener('error', function(e) {
+                console.error('音频加载错误:', e);
+                
+                // 尝试下一个音频源
+                currentSourceIndex++;
+                if (currentSourceIndex < audioSources.length) {
+                    console.log('尝试下一个音频源:', audioSources[currentSourceIndex]);
+                    audio.src = audioSources[currentSourceIndex];
+                    audio.load();
+                    showAudioStatus('正在加载音乐...', 'info');
+                } else {
+                    console.log('所有音频源都加载失败');
+                    audioLoaded = false;
+                    showAudioStatus('音乐加载失败，请刷新页面重试', 'error');
+                    updateMusicUI(false);
+                }
+            });
+            
+            // 音频播放
+            audio.addEventListener('play', function() {
+                console.log('音频开始播放');
+                isAudioPlaying = true;
+                updateMusicUI(true);
+            });
+            
+            // 音频暂停
+            audio.addEventListener('pause', function() {
+                console.log('音频暂停');
+                isAudioPlaying = false;
+                updateMusicUI(false);
+            });
+            
+            // 音频播放错误
+            audio.addEventListener('abort', function() {
+                console.log('音频播放中断');
+                isAudioPlaying = false;
+                updateMusicUI(false);
+            });
+            
+            // 尝试加载音频
+            console.log('开始加载音频...');
+            showAudioStatus('正在加载圣诞音乐...', 'info');
+            audio.load();
+            
+            // 设置超时检查
+            setTimeout(() => {
+                if (!audioLoaded) {
+                    console.log('音频加载超时');
+                    showAudioStatus('音乐加载较慢，请稍后点击播放', 'info');
+                }
+            }, 3000);
+        }
+        
+        // 更新音乐UI
+        function updateMusicUI(isPlaying) {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const musicSubtitle = document.getElementById('musicSubtitle');
+            const musicPlayer = document.getElementById('musicPlayer');
+            
+            if (isPlaying) {
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                musicSubtitle.textContent = "正在播放";
+                musicPlayer.style.background = "rgba(230, 57, 70, 0.25)";
             } else {
-                backgroundMusic.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                musicSubtitle.textContent = audioLoaded ? "点击播放" : "加载中...";
+                musicPlayer.style.background = "rgba(255, 255, 255, 0.15)";
+            }
+        }
+        
+        // 播放音乐
+        function playMusic() {
+            if (!audio) {
+                console.error('音频元素未初始化');
+                showAudioStatus('音乐播放器未初始化', 'error');
+                return;
+            }
+            
+            if (!audioLoaded) {
+                console.log('音频尚未加载完成，尝试重新加载');
+                showAudioStatus('正在加载音乐，请稍后...', 'info');
+                
+                // 尝试重新加载
+                audio.load();
+                
+                // 再次尝试播放
+                setTimeout(() => {
+                    if (audioLoaded) {
+                        safePlayAudio();
+                    } else {
+                        showAudioStatus('音乐加载失败，请点击重试', 'error');
+                    }
+                }, 1000);
+                return;
+            }
+            
+            safePlayAudio();
+        }
+        
+        // 安全的音频播放方法
+        function safePlayAudio() {
+            if (!audio || !audioLoaded) return;
+            
+            // 标记用户已交互
+            userInteracted = true;
+            
+            // 使用Promise处理播放
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // 播放成功
+                    isAudioPlaying = true;
+                    updateMusicUI(true);
+                    showAudioStatus('音乐播放中 🎵', 'success');
+                }).catch(error => {
+                    // 播放失败
+                    console.error('播放失败:', error);
+                    
+                    if (error.name === 'NotAllowedError') {
+                        showAudioStatus('请点击页面任意位置后重试播放', 'info');
+                    } else {
+                        showAudioStatus('播放失败: ' + error.message, 'error');
+                    }
+                    
+                    isAudioPlaying = false;
+                    updateMusicUI(false);
+                });
+            }
+        }
+        
+        // 暂停音乐
+        function pauseMusic() {
+            if (audio && isAudioPlaying) {
+                audio.pause();
+                isAudioPlaying = false;
+                updateMusicUI(false);
+            }
+        }
+        
+        // 切换音乐播放状态
+        function toggleMusic() {
+            if (!userInteracted) {
+                // 第一次点击，先标记用户已交互
+                userInteracted = true;
+                document.body.classList.add('user-interacted');
+            }
+            
+            if (isAudioPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
             }
         }
         
         // 生成雪花
         function createSnowflakes() {
             const snowflakesContainer = document.getElementById('snowflakes');
-            const snowflakeCount = 50; // 减少数量提高性能
+            const snowflakeCount = 50;
             
             for (let i = 0; i < snowflakeCount; i++) {
                 const snowflake = document.createElement('div');
@@ -1204,7 +1304,7 @@
         // 生成星星
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            const starCount = 30; // 减少数量提高性能
+            const starCount = 30;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
@@ -1286,6 +1386,8 @@
         document.addEventListener('touchstart', function(e) {
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
+            userInteracted = true; // 标记用户已交互
+            document.body.classList.add('user-interacted');
         }, { passive: true });
         
         document.addEventListener('touchend', function(e) {
@@ -1369,12 +1471,18 @@
                 // 创建庆祝特效
                 createCelebration();
                 
-                // 播放庆祝音乐（如果当前没有播放音乐）
-                if (backgroundMusic.paused) {
-                    backgroundMusic.play();
+                // 尝试播放音乐作为庆祝
+                if (!isAudioPlaying && audioLoaded) {
+                    setTimeout(() => {
+                        playMusic();
+                    }, 500);
                 }
                 
                 // 更改音乐播放器样式以庆祝
+                const musicPlayer = document.getElementById('musicPlayer');
+                const musicTitle = document.getElementById('musicTitle');
+                const musicSubtitle = document.getElementById('musicSubtitle');
+                
                 musicPlayer.style.background = "rgba(42, 157, 143, 0.3)";
                 musicPlayer.style.boxShadow = "0 5px 20px rgba(42, 157, 143, 0.4)";
                 musicTitle.textContent = "庆祝音乐！";
@@ -1399,7 +1507,7 @@
             const container = document.querySelector('body');
             
             // 创建心形和星星
-            for (let i = 0; i < 20; i++) { // 减少数量提高性能
+            for (let i = 0; i < 20; i++) {
                 const celebration = document.createElement('div');
                 celebration.innerHTML = i % 3 === 0 ? '❤️' : (i % 3 === 1 ? '✨' : '🎉');
                 celebration.style.position = 'fixed';
@@ -1458,13 +1566,19 @@
             // 初始化特效和音乐
             createSnowflakes();
             createStars();
-            initMusicPlayer();
-            
-            // 显示微信提示
-            showWeChatTip();
+            initAudio();
             
             // 确保第一步是激活状态
             document.getElementById('step1').classList.add('active');
+            
+            // 设置音乐控制按钮事件
+            document.getElementById('playPauseBtn').addEventListener('click', toggleMusic);
+            
+            // 页面点击事件，用于触发音频播放
+            document.addEventListener('click', function() {
+                userInteracted = true;
+                document.body.classList.add('user-interacted');
+            });
             
             // 添加scroll事件监听器，用于检测滚动到各个步骤
             let scrollTimeout;
@@ -1498,6 +1612,14 @@
                     });
                 }, 100);
             }, { passive: true });
+            
+            // 页面完全加载后尝试预加载音频
+            window.addEventListener('load', function() {
+                console.log('页面完全加载，音频状态:', audioLoaded);
+                if (!audioLoaded) {
+                    showAudioStatus('音乐加载完成，可以点击播放', 'info');
+                }
+            });
         });
         
         // 防止页面下拉刷新（iOS）
