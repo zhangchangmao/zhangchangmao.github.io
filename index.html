@@ -71,9 +71,9 @@
         .content-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            gap: 60px;
+            gap: 80px;
             max-width: 1100px;
-            align-items: start;
+            align-items: stretch;
         }
 
         .info-card {
@@ -81,6 +81,11 @@
             padding: 30px;
             border-radius: 18px;
             width: 100%;
+        }
+
+        .narrow-card {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* 导航 */
@@ -245,7 +250,7 @@
 
         <!-- P5: 操作演示与工具 (原P4序号顺延) -->
         <section class="slide">
-            <div class="info-card">
+            <div class="info-card narrow-card">
                 <h2>资源与演示</h2>
                 <p><span class="highlight">官方 Skills 库：</span></p>
                 <p style="font-size: 1rem;">GitHub: <code>anthropics/skills</code> (5.4万+ Star)<br>
@@ -257,7 +262,7 @@
         </section>
 
         <section class="slide">
-            <div class="info-card">
+            <div class="info-card narrow-card">
                 <h2>自定义 Skills 案例</h2>
                 <ul style="line-height: 2;">
                     <li><strong>代码核查：</strong> 自定义核查要求</li>
