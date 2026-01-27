@@ -1,1825 +1,251 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>圣诞约会邀请函</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Skills 公司内部分享会</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-        }
-
-        html,
-        body {
-            height: 100%;
-            overflow-x: hidden;
-            background-color: #0d1b2a;
-        }
-
-        body {
-            position: relative;
-            color: #fff;
-            background: linear-gradient(135deg, #0d1b2a 0%, #1a0b2e 50%, #1b263b 100%);
-        }
-
-        /* 微信适配优化 */
-        @supports (top: constant(safe-area-inset-top)) or (top: env(safe-area-inset-top)) {
-            body {
-                padding-top: constant(safe-area-inset-top);
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: constant(safe-area-inset-bottom);
-                padding-bottom: env(safe-area-inset-bottom);
-                padding-left: constant(safe-area-inset-left);
-                padding-left: env(safe-area-inset-left);
-                padding-right: constant(safe-area-inset-right);
-                padding-right: env(safe-area-inset-right);
-            }
-
-            .music-player {
-                top: calc(20px + constant(safe-area-inset-top));
-                top: calc(20px + env(safe-area-inset-top));
-            }
-
-            .scroll-hint {
-                bottom: calc(30px + constant(safe-area-inset-bottom));
-                bottom: calc(30px + env(safe-area-inset-bottom));
-            }
-        }
-
-        /* 雪花效果 */
-        .snowflake {
-            position: fixed;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* 闪烁的星星 */
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        /* 音乐控制面板 */
-        .music-player {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .music-player:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-btn {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .music-btn:hover,
-        .music-btn:active {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .music-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            max-width: 150px;
-        }
-
-        .music-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ff9eaa;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .music-subtitle {
-            font-size: 0.75rem;
-            color: #a8dadc;
-            opacity: 0.8;
-        }
-
-        /* 向下滚动提示 */
-        .scroll-hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            text-align: center;
-            color: #ff9eaa;
-            animation: bounce 2s infinite;
-            font-size: 1.2rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
-            border-radius: 30px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 158, 170, 0.3);
-        }
-
-        .scroll-hint i {
-            margin-top: 5px;
-            display: block;
-            font-size: 1.5rem;
-        }
-
-
-        /* 名字图片容器 */
-        .name-image-container {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 0 auto 15px;
-            border: 5px solid #ff9eaa;
-            box-shadow: 0 0 15px rgba(255, 158, 170, 0.5);
-            position: relative;
-            background: linear-gradient(135deg, rgba(255, 158, 170, 0.2), rgba(230, 57, 70, 0.2));
-        }
-
-        /* 名字图片 */
-        .name-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-            display: none;
-            /* 默认隐藏，加载成功后才显示 */
-        }
-
-        .name-image:hover {
-            transform: scale(1.05);
-        }
-
-        /* 图片占位符 */
-        .image-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #ff9eaa;
-            background: linear-gradient(135deg, rgba(255, 158, 170, 0.1), rgba(230, 57, 70, 0.1));
-        }
-
-        .image-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .image-placeholder p {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .name-image-container {
-                width: 100px;
-                height: 100px;
-            }
-
-            .image-placeholder i {
-                font-size: 2.5rem;
-            }
-        }
-
-        /* 每个步骤的样式 */
-        .step {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 80px 20px;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .step.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 步骤指示器 */
-        .step-indicator {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .step-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .step-dot.active {
-            background: #ff9eaa;
-            transform: scale(1.3);
-            box-shadow: 0 0 10px rgba(255, 158, 170, 0.7);
-        }
-
-        /* 第一步：封面 */
-        #step1 {
-            background: linear-gradient(135deg, rgba(26, 11, 46, 0.9), rgba(13, 27, 42, 0.9));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover-title {
-            font-size: 3.5rem;
-            text-align: center;
-            color: #ff9eaa;
-            text-shadow: 0 0 20px rgba(255, 158, 170, 0.7);
-            margin-bottom: 20px;
-            font-weight: 700;
-            opacity: 0;
-            transform: translateY(-30px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-        }
-
-        .step.active .cover-title {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .cover-subtitle {
-            font-size: 1.6rem;
-            text-align: center;
-            color: #a8dadc;
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease 1s, transform 1s ease 1s;
-        }
-
-        .step.active .cover-subtitle {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .cover-date {
-            font-size: 1.4rem;
-            text-align: center;
-            color: #f1faee;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease 1.5s, transform 1s ease 1.5s;
-        }
-
-        .step.active .cover-date {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 第二步：邀请人 */
-        #step2 {
-            background: linear-gradient(135deg, rgba(29, 53, 87, 0.9), rgba(69, 123, 157, 0.9));
-        }
-
-        .invitation-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .step.active .invitation-card {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .invitation-card h2 {
-            font-size: 2.2rem;
-            color: #ff9eaa;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .names-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .name-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            flex: 1;
-            min-width: 200px;
-            border-top: 5px solid #ff9eaa;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .name-card:nth-child(1) {
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-        }
-
-        .name-card:nth-child(2) {
-            transition: opacity 1s ease 1s, transform 1s ease 1s;
-        }
-
-        .step.active .name-card {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .name-card i {
-            font-size: 2.5rem;
-            color: #ff9eaa;
-            margin-bottom: 15px;
-        }
-
-        .name-card h3 {
-            font-size: 1.5rem;
-            color: #a8dadc;
-            margin-bottom: 10px;
-        }
-
-        .name-card p {
-            font-size: 1.8rem;
-            color: #f1faee;
-            font-weight: bold;
-        }
-
-        /* 第三步：时间地点 */
-        #step3 {
-            background: linear-gradient(135deg, rgba(230, 57, 70, 0.9), rgba(255, 107, 107, 0.9));
-        }
-
-        .details-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            max-width: 800px;
-            width: 90%;
-        }
-
-        .detail-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            flex: 1;
-            min-width: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .detail-card:nth-child(1) {
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-        }
-
-        .detail-card:nth-child(2) {
-            transition: opacity 1s ease 1s, transform 1s ease 1s;
-        }
-
-        .step.active .detail-card {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .detail-card h3 {
-            font-size: 1.8rem;
-            color: #ff9eaa;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .detail-item i {
-            font-size: 1.5rem;
-            color: #ffb703;
-            width: 30px;
-        }
-
-        .detail-item p {
-            font-size: 1.3rem;
-            color: #f1faee;
-        }
-
-        /* 第四步：邀请词 */
-        #step4 {
-            background: linear-gradient(135deg, rgba(42, 157, 143, 0.9), rgba(38, 70, 83, 0.9));
-        }
-
-        .invitation-text-container {
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .step.active .invitation-text-container {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .invitation-text-container h3 {
-            font-size: 2.2rem;
-            color: #ff9eaa;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .invitation-text {
-            font-size: 1.3rem;
-            line-height: 1.8;
-            color: #f1faee;
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-
-        .invitation-text p {
-            margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .step.active .invitation-text p {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .invitation-text p:nth-child(1) {
-            transition-delay: 0.5s;
-        }
-
-        .invitation-text p:nth-child(2) {
-            transition-delay: 1s;
-        }
-
-        .invitation-text p:nth-child(3) {
-            transition-delay: 1.5s;
-        }
-
-        .invitation-text p:nth-child(4) {
-            transition-delay: 2s;
-        }
-
-        .invitation-text p:nth-child(5) {
-            transition-delay: 2.5s;
-        }
-
-        /* 第五步：邀请按钮 */
-        #step5 {
-            background: linear-gradient(135deg, rgba(29, 53, 87, 0.9), rgba(13, 27, 42, 0.9));
-        }
-
-        .buttons-container {
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .step.active .buttons-container {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .buttons-container h3 {
-            font-size: 2.2rem;
-            color: #ff9eaa;
-            margin-bottom: 30px;
-        }
-
-        .buttons-container p {
-            font-size: 1.3rem;
-            color: #f1faee;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .btn {
-            padding: 20px 50px;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            max-width: 350px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease, background 0.3s ease;
-            -webkit-appearance: none;
-            touch-action: manipulation;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .step.active .btn {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .step.active .accept-btn {
-            transition-delay: 0.5s;
-        }
-
-        .step.active .reject-btn {
-            transition-delay: 1s;
-        }
-
-        .accept-btn {
-            background: linear-gradient(135deg, #e63946, #ff6b6b);
-            color: white;
-            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
-        }
-
-        .accept-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 10px 25px rgba(230, 57, 70, 0.6);
-        }
-
-        .reject-btn {
-            background: linear-gradient(135deg, #457b9d, #1d3557);
-            color: white;
-            box-shadow: 0 5px 15px rgba(29, 53, 87, 0.4);
-            position: relative;
-        }
-
-        .reject-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 10px 25px rgba(29, 53, 87, 0.6);
-        }
-
-        /* 第六步：响应消息 */
-        #step6 {
-            background: linear-gradient(135deg, rgba(26, 11, 46, 0.9), rgba(43, 45, 66, 0.9));
-            display: none;
-        }
-
-        #step6.active {
-            display: flex;
-        }
-
-        .response-container {
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-        }
-
-        .response-title {
-            font-size: 2.8rem;
-            color: #ff9eaa;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 158, 170, 0.7);
-        }
-
-        .response-text {
-            font-size: 1.6rem;
-            color: #f1faee;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        .celebration-emoji {
-            font-size: 3.5rem;
-            margin-bottom: 30px;
-            animation: bounce 1s infinite alternate;
-        }
-
-        .final-message {
-            font-size: 1.4rem;
-            color: #a8dadc;
-            margin-top: 40px;
-            font-style: italic;
-        }
-
-        /* 动画效果 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-
-        @keyframes twinkle {
-
-            0%,
-            100% {
-                opacity: 0.2;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .shake {
-            animation: shake 0.5s;
-        }
-
-        /* 响应式设计 - iPhone优化 */
-        @media (max-width: 768px) {
-            .cover-title {
-                font-size: 2.8rem;
-            }
-
-            .cover-subtitle {
-                font-size: 1.4rem;
-            }
-
-            .cover-date {
-                font-size: 1.2rem;
-            }
-
-            .invitation-card,
-            .invitation-text-container,
-            .buttons-container,
-            .response-container {
-                padding: 25px;
-            }
-
-            .invitation-card h2 {
-                font-size: 1.8rem;
-            }
-
-            .name-card {
-                min-width: 100%;
-                padding: 20px;
-            }
-
-            .name-card p {
-                font-size: 1.6rem;
-            }
-
-            .detail-card h3 {
-                font-size: 1.6rem;
-            }
-
-            .detail-item p {
-                font-size: 1.2rem;
-            }
-
-            .invitation-text-container h3 {
-                font-size: 1.8rem;
-            }
-
-            .invitation-text {
-                font-size: 1.2rem;
-            }
-
-            .buttons-container h3 {
-                font-size: 1.8rem;
-            }
-
-            .buttons-container p {
-                font-size: 1.2rem;
-            }
-
-            .btn {
-                padding: 18px 40px;
-                font-size: 1.3rem;
-            }
-
-            .step-indicator {
-                left: 15px;
-            }
-
-            .music-player {
-                top: 15px;
-                right: 15px;
-                padding: 10px 15px;
-            }
-
-            .music-info {
-                display: none;
-            }
-
-            .response-title {
-                font-size: 2.2rem;
-            }
-
-            .response-text {
-                font-size: 1.4rem;
-            }
-
-            .celebration-emoji {
-                font-size: 2.8rem;
-            }
-
-            .final-message {
-                font-size: 1.2rem;
-            }
-
-            .scroll-hint {
-                font-size: 1rem;
-                padding: 8px 15px;
-            }
-        }
-
-        /* 圣诞装饰 */
-        .christmas-decoration {
-            position: absolute;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .decoration-1 {
-            width: 70px;
-            height: 70px;
-            background: #e63946;
-            top: 5%;
-            left: 5%;
-            border-radius: 50%;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            opacity: 0.7;
-        }
-
-        .decoration-2 {
-            width: 60px;
-            height: 60px;
-            background: #2a9d8f;
-            bottom: 5%;
-            right: 5%;
-            border-radius: 50%;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            opacity: 0.7;
-        }
-
-        .decoration-3 {
-            width: 50px;
-            height: 50px;
-            background: #ffb703;
-            top: 10%;
-            right: 10%;
-            border-radius: 50%;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            opacity: 0.7;
-        }
-
-        /* 加载动画 */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0d1b2a;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #ff9eaa;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        .loading-text {
-            color: #ff9eaa;
-            font-size: 1.2rem;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* 音频加载状态 */
-        .audio-status {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(230, 57, 70, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            z-index: 100;
-            display: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 90%;
-            text-align: center;
-        }
-
-        .audio-status.show {
-            display: block;
-        }
+        :root {
+            --primary-color: #3498db;
+            --bg-color: #f4f7f9;
+            --text-color: #2c3e50;
+        }
+        body, html {
+            margin: 0; padding: 0; height: 100%; overflow: hidden;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+        }
+        .slides-container {
+            width: 100vw; height: 100vh; display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .slide {
+            min-width: 100vw; height: 100vh; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            padding: 40px; box-sizing: border-box; position: relative;
+        }
+        .content-box {
+            background: white; width: 85%; max-width: 1000px; height: 80%;
+            padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; overflow-y: auto;
+        }
+        h1 { font-size: 2.5em; color: var(--primary-color); border-bottom: 3px solid var(--primary-color); padding-bottom: 10px; margin-top: 0; }
+        h2 { font-size: 1.8em; color: #34495e; margin-bottom: 20px; }
+        p, li { font-size: 1.2em; line-height: 1.6; }
+        .highlight { color: #e67e22; font-weight: bold; }
+        
+        /* 图片展示区域模拟 */
+        .img-display {
+            background: #f9f9f9; border: 2px dashed #bdc3c7; border-radius: 10px;
+            margin: 20px 0; display: flex; justify-content: center; align-items: center;
+            flex-grow: 1; position: relative; overflow: hidden;
+        }
+        .img-placeholder-text { color: #95a5a6; font-style: italic; text-align: center; padding: 20px; }
+        
+        /* 导航按钮 */
+        .nav-btn {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            background: rgba(52, 152, 219, 0.7); color: white; border: none;
+            padding: 20px; cursor: pointer; border-radius: 50%; font-size: 24px;
+            transition: background 0.3s; z-index: 100;
+        }
+        .nav-btn:hover { background: rgba(52, 152, 219, 1); }
+        #prevBtn { left: 20px; }
+        #nextBtn { right: 20px; }
+        .progress-dots {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px;
+        }
+        .dot { width: 12px; height: 12px; background: #bdc3c7; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: var(--primary-color); transform: scale(1.3); }
+
+        /* 特殊布局 */
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     </style>
 </head>
-
 <body>
-    <!-- 加载动画 -->
-    <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">加载中，请稍候...</div>
-    </div>
 
-    <!-- 音频状态提示 -->
-    <div class="audio-status" id="audioStatus"></div>
+    <button class="nav-btn" id="prevBtn">❮</button>
+    <button class="nav-btn" id="nextBtn">❯</button>
 
-    <!-- 音乐控制面板 -->
-    <div class="music-player" id="musicPlayer">
-        <div class="music-info">
-            <div class="music-title" id="musicTitle">圣诞音乐</div>
-            <div class="music-subtitle" id="musicSubtitle">点击播放</div>
-        </div>
-        <button class="music-btn" id="playPauseBtn">
-            <i class="fas fa-play"></i>
-        </button>
-    </div>
-
-    <!-- 步骤指示器 -->
-    <div class="step-indicator" id="stepIndicator">
-        <div class="step-dot active" data-step="1"></div>
-        <div class="step-dot" data-step="2"></div>
-        <div class="step-dot" data-step="3"></div>
-        <div class="step-dot" data-step="4"></div>
-        <div class="step-dot" data-step="5"></div>
-    </div>
-
-    <!-- 向下滚动提示 -->
-    <div class="scroll-hint" id="scrollHint">
-        向下滑动发现惊喜
-        <i class="fas fa-chevron-down"></i>
-    </div>
-
-    <!-- 第一步：封面 -->
-    <section class="step active" id="step1">
-        <div class="christmas-decoration decoration-1"></div>
-        <div class="christmas-decoration decoration-2"></div>
-        <div class="christmas-decoration decoration-3"></div>
-
-        <h1 class="cover-title">🎄 圣诞惊喜 🎄</h1>
-        <h2 class="cover-subtitle">一份特别的邀请正在等待你</h2>
-        <p class="cover-date">2025年12月25日 · 圣诞之夜</p>
-    </section>
-
-    <!-- 第二步：邀请人和被邀请人 -->
-    <section class="step" id="step2">
-        <div class="invitation-card">
-            <h2>邀请人与被邀请人</h2>
-            <div class="names-container">
-                <div class="name-card">
-                    <div class="name-image-container">
-                        <!-- 邀请人图片 -->
-                        <img src="1.jpg" alt="邀请人" class="name-image" id="inviterImage">
-                        <div class="image-placeholder" id="inviterPlaceholder">
-                            <i class="fas fa-user"></i>
-                            <p>张昌茂</p>
-                        </div>
+    <div class="slides-container" id="slidesContainer">
+        
+        <!-- 第 1 页：封面 -->
+        <section class="slide">
+            <div class="content-box">
+                <div style="text-align: center; margin-top: 50px;">
+                    <h1>Agent Skills</h1>
+                    <h2>一种全新的工作和学习方式</h2>
+                    <p style="margin-top: 40px;">讲师：[您的姓名] | 公司内部分享会</p>
+                    <div class="img-display" style="height: 200px;">
+                        <p class="img-placeholder-text">【图示：大模型图标与各种工具文件夹连接的背景图 [1]】</p>
                     </div>
-                    <h3>邀请人</h3>
-                    <p id="yourName">张昌茂</p>
                 </div>
-                <div class="name-card">
-                    <div class="name-image-container">
-                        <!-- 被邀请人图片 -->
-                        <img src="2.jpg" alt="被邀请人" class="name-image" id="inviteeImage">
-                        <div class="image-placeholder" id="inviteePlaceholder">
-                            <i class="fas fa-heart"></i>
-                            <p>吴茜</p>
-                        </div>
+            </div>
+        </section>
+
+        <!-- 第 2 页：产生背景与解决的问题 -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>1. 产生背景：为什么要使用 Skills？</h1>
+                <div class="split">
+                    <div>
+                        <p><strong>大模型现状：</strong></p>
+                        <ul>
+                            <li><span class="highlight">特定领域不专：</span> 通用模型难以理解公司内部的深度业务逻辑 [1]。</li>
+                            <li><span class="highlight">复杂任务困难：</span> 面对需要多步骤、跨工具的长链路任务时力不从心 [1]。</li>
+                        </ul>
+                        <p><strong>解决的核心问题：</strong></p>
+                        <p>Skills 作为“桥梁”，能够将<strong>封装经验知识</strong>转化为 AI 可直接运行的流程，实现<strong>按需自动使用</strong> [1]。</p>
                     </div>
-                    <h3>被邀请人</h3>
-                    <p id="girlName">吴茜</p>
+                    <div class="img-display">
+                        <p class="img-placeholder-text"></p>
+						<img src = ".\1.png" />
+                    </div>
                 </div>
             </div>
-            <p style="text-align: center; color: #a8dadc; font-size: 1.2rem;">在这个特别的夜晚，我想邀请特别的你</p>
-        </div>
-    </section>
+        </section>
 
-    <!-- 第三步：时间和地点 -->
-    <section class="step" id="step3">
-        <div class="details-container">
-            <div class="detail-card">
-                <h3><i class="far fa-clock"></i> 约会时间</h3>
-                <div class="detail-item">
-                    <i class="far fa-calendar-alt"></i>
-                    <p>2025年12月25日</p>
+        <!-- 第 3 页：基本原理：Agent + Skills + Computer -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>2. 基本原理：三位一体架构</h1>
+                <p>Agent Skills 的运行逻辑是基于 **Agent + Skills + Computer** 的深度协作：</p>
+                <div class="img-display" style="max-height: 350px;">
+                    <p class="img-placeholder-text">【图示：左侧为 Agent configuration (含核心 Prompt)，右侧为 Agent virtual machine，中间通过 "use computer" 指令连接文件系统中的 Skills 目录 [1]】</p>
                 </div>
-                <div class="detail-item">
-                    <i class="far fa-clock"></i>
-                    <p>晚上8:00整</p>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-snowflake"></i>
-                    <p>圣诞之夜 · 星光时刻</p>
+                <ul>
+                    <li><strong>Agent 配置：</strong> 在 System Prompt 中装备技能列表（如 pdf, docx, xlsx）[1]。</li>
+                    <li><strong>运行环境：</strong> 智能体通过 Bash、Python 或 Nodejs 在虚拟运行环境中读取并运行技能脚本 [1]。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 第 4 页：Skill 的标准结构 -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>3. Skill 的内部构造</h1>
+                <p>一个标准的 Skill 并不是一段杂乱的代码，而是一个<strong>结构化的文件夹</strong>：</p>
+                <div class="split">
+                    <div class="img-display">
+                        <p class="img-placeholder-text">【图示：SKILL 文件夹拆解图。左侧为 SKILL.md (含技能流程、文件说明)，右侧为辅助文件夹：examples, templates, scripts [1]】</p>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><span class="highlight">SKILL.md：</span> 核心文档。定义了 `name` 和 `description`，告知 AI 何时调用该技能 [1]。</li>
+                            <li><span class="highlight">reference.md：</span> 作为索引，帮助 AI 快速检索背景信息，支持渐进式加载 [1]。</li>
+                            <li><span class="highlight">Scripts：</span> 实际运行的 Python 或脚本代码 [1]。</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="detail-card">
-                <h3><i class="fas fa-map-marker-alt"></i> 约会地点</h3>
-                <div class="detail-item">
-                    <i class="fas fa-map-pin"></i>
-                    <p>吴茜家楼下</p>
+        <!-- 第 5 页：Skills vs. MCP -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>4. 核心区分：Skills vs. MCP</h1>
+                <p>Skills 和 MCP (Model Context Protocol) 解决的是本质不同的问题：</p>
+                <div class="img-display">
+                    <p class="img-placeholder-text">【图示：左侧 Skills 标注为“知识共享、简单 MD 文件、无需服务器”；右侧 MCP 标注为“功能扩展、需要编码、外部集成” [1]】</p>
                 </div>
-                <div class="detail-item">
-                    <i class="fas fa-location-dot"></i>
-                    <p>平安路123号，圣诞广场前</p>
-                </div>
-                <div class="detail-item">
-                    <i class="fas fa-star"></i>
-                    <p>我会在最大的圣诞树下等你</p>
+                <p><strong>核心观点：</strong> 两者是<span class="highlight">互补共生</span>的。Skills 分享知识经验，MCP 扩展外部集成，共同实现完美协作 [1]。</p>
+            </div>
+        </section>
+
+        <!-- 第 6 页：优缺点深度分析 -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>5. 优缺点：硬币的两面</h1>
+                <div class="split">
+                    <div>
+                        <h2 style="color: #27ae60;">优势</h2>
+                        <ul>
+                            <li><span class="highlight">轻量灵活：</span> 基于 Markdown，人人可创。</li>
+                            <li><span class="highlight">渐进式加载：</span> 极大节省 Token 消耗 [1]。</li>
+                        </ul>
+                        <h2 style="color: #c0392b;">缺点与挑战</h2>
+                        <ul>
+                            <li><span class="highlight">上手门槛：</span> 终端 CLI 环境对普通用户有“劝退感” [1]。</li>
+                            <li><span class="highlight">路径不统一：</span> 不同工具（如 Cursor, Claude Code）存放路径各异 [1]。</li>
+                        </ul>
+                    </div>
+                    <div class="img-display">
+                        <p class="img-placeholder-text">【图示：用户面对 CLI 的困惑时刻 + 文件臃肿导致加载卡住的示意图 [1]】</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 第四步：邀请词 -->
-    <section class="step" id="step4">
-        <div class="invitation-text-container">
-            <h3>亲爱的 <span id="girlNameText">你</span></h3>
-            <div class="invitation-text">
-                <p>当圣诞的钟声敲响，当街道缀满闪烁的灯光，我心中涌现一个特别的念头——这个圣诞节，我想与你共度。</p>
-                <p>这个夜晚充满了奇迹与温暖，空气中弥漫着肉桂与松针的香气，每一颗星星都似乎为这个时刻而闪耀。</p>
-                <p>我想邀请你一同漫步在圣诞市集，在熙攘的人群中分享热红酒的温暖，在旋转木马前留下笑声，在璀璨灯光下交换新年的祝福。</p>
-                <p>无论我们是在温暖的咖啡馆里聊天，还是在雪景中漫步，只要与你在一起，这个夜晚就会成为我最珍贵的圣诞记忆。</p>
-                <p>希望你能接受我的邀请，让这个圣诞节成为我们故事中闪闪发光的一页。</p>
+        <!-- 第 7 页：应用案例与答疑 -->
+        <section class="slide">
+            <div class="content-box">
+                <h1>6. 真实有用的案例展示</h1>
+                <div class="split">
+                    <ul>
+                        <li><span class="highlight">字幕校对 Skill：</span> 统一专业术语，修正语音识别错误 [1]。</li>
+                        <li><span class="highlight">小报童知识库：</span> 优先检索私有内容，提供精准问答 [1]。</li>
+                        <li><span class="highlight">风格优化工具：</span> 自动识别并修正“AI 味” [1]。</li>
+                        <li>其他：代码审查、著作权撰写、自动配图等 [1]。</li>
+                    </ul>
+                    <div class="img-display">
+                        <p class="img-placeholder-text">【图示：多个 Skill (如 video-downloader, style-optimizer) 在 IDE 中的目录截图 [1]】</p>
+                    </div>
+                </div>
+                <hr>
+                <h2 style="text-align: center;">Q&A：欢迎开麦提问！</h2>
             </div>
-            <p style="text-align: right; margin-top: 30px; font-size: 1.4rem; color: #ff9eaa;">期待与你相见<br><span
-                    id="yourNameText">我</span></p>
-        </div>
-    </section>
+        </section>
 
-    <!-- 第五步：邀请按钮 -->
-    <section class="step" id="step5">
-        <div class="buttons-container">
-            <h3>你的回答是？</h3>
-            <p>这个圣诞之夜，你会和我一起创造美好回忆吗？<br>请告诉我你的选择...</p>
+    </div>
 
-            <div class="buttons">
-                <button class="btn accept-btn" id="acceptBtn">
-                    <i class="fas fa-heart"></i> 接受邀请
-                </button>
-                <button class="btn reject-btn" id="rejectBtn">
-                    <i class="fas fa-times"></i> 拒绝邀请
-                </button>
-            </div>
-
-            <p style="margin-top: 30px; color: #a8dadc; font-size: 1.1rem;">小提示：圣诞节拒绝按钮可能有点调皮哦~</p>
-        </div>
-    </section>
-
-    <!-- 第六步：响应消息（接受后显示） -->
-    <section class="step" id="step6">
-        <div class="response-container">
-            <h2 class="response-title" id="responseTitle">太棒了！🎉</h2>
-            <div class="celebration-emoji" id="celebrationEmoji">🎄❤️🎁✨</div>
-            <p class="response-text" id="responseText">
-                我太高兴了！今晚7点，市中心圣诞市集入口处不见不散！<br>我会穿红色毛衣戴圣诞帽，一眼就能认出我！<br>期待与你共度这个美好的圣诞夜晚！</p>
-            <p class="final-message">圣诞快乐，我的特别嘉宾！愿这个夜晚成为我们美好回忆的开始。</p>
-        </div>
-    </section>
-
-    <!-- 雪花效果容器 -->
-    <div id="snowflakes"></div>
-
-    <!-- 闪烁的星星容器 -->
-    <div class="stars" id="stars"></div>
+    <div class="progress-dots" id="dotsContainer"></div>
 
     <script>
-        // 获取所有步骤元素
-        const steps = document.querySelectorAll('.step');
-        const stepDots = document.querySelectorAll('.step-dot');
-        const scrollHint = document.getElementById('scrollHint');
+        const container = document.getElementById('slidesContainer');
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        let currentIndex = 0;
 
-        // 当前激活的步骤
-        let currentStep = 1;
-        let isScrolling = false;
-
-        // 音频相关变量
-        let audio = null;
-        let isAudioPlaying = false;
-        let audioLoaded = false;
-        let userInteracted = false;
-
-        // 音频源 - 使用更可靠的音频源
-        const audioSources = [
-            "https://downsc.chinaz.net/Files/DownLoad/sound1/202211/y1365.mp3",
-            "https://assets.mixkit.co/music/preview/mixkit-a-christmas-carol-1115.mp3"
-        ];
-
-        // 显示音频状态
-        function showAudioStatus(message, type = 'info') {
-            const audioStatus = document.getElementById('audioStatus');
-            audioStatus.textContent = message;
-            audioStatus.className = 'audio-status';
-
-            // 根据类型设置样式
-            if (type === 'success') {
-                audioStatus.style.background = 'rgba(42, 157, 143, 0.9)';
-            } else if (type === 'error') {
-                audioStatus.style.background = 'rgba(230, 57, 70, 0.9)';
-            } else {
-                audioStatus.style.background = 'rgba(29, 53, 87, 0.9)';
-            }
-
-            audioStatus.classList.add('show');
-
-            // 3秒后自动隐藏
-            setTimeout(() => {
-                audioStatus.classList.remove('show');
-            }, 3000);
-        }
-
-        // 初始化音频
-        function initAudio() {
-            // 创建音频元素
-            audio = new Audio();
-            audio.loop = true;
-            audio.volume = 0.5;
-            audio.preload = 'auto';
-
-            // 设置第一个音频源
-            let currentSourceIndex = 0;
-            audio.src = audioSources[currentSourceIndex];
-
-            // 音频加载成功
-            audio.addEventListener('canplaythrough', function () {
-                console.log('音频可以播放了');
-                audioLoaded = true;
-                updateMusicUI(false);
-            });
-
-            // 音频加载错误
-            audio.addEventListener('error', function (e) {
-                console.error('音频加载错误:', e);
-
-                // 尝试下一个音频源
-                currentSourceIndex++;
-                if (currentSourceIndex < audioSources.length) {
-                    console.log('尝试下一个音频源:', audioSources[currentSourceIndex]);
-                    audio.src = audioSources[currentSourceIndex];
-                    audio.load();
-                    showAudioStatus('正在加载音乐...', 'info');
-                } else {
-                    console.log('所有音频源都加载失败');
-                    audioLoaded = false;
-                    showAudioStatus('音乐加载失败，请刷新页面重试', 'error');
-                    updateMusicUI(false);
-                }
-            });
-
-            // 音频播放
-            audio.addEventListener('play', function () {
-                console.log('音频开始播放');
-                isAudioPlaying = true;
-                updateMusicUI(true);
-            });
-
-            // 音频暂停
-            audio.addEventListener('pause', function () {
-                console.log('音频暂停');
-                isAudioPlaying = false;
-                updateMusicUI(false);
-            });
-
-            // 音频播放错误
-            audio.addEventListener('abort', function () {
-                console.log('音频播放中断');
-                isAudioPlaying = false;
-                updateMusicUI(false);
-            });
-
-            // 尝试加载音频
-            console.log('开始加载音频...');
-            showAudioStatus('正在加载圣诞音乐...', 'info');
-            audio.load();
-
-            // 设置超时检查
-            setTimeout(() => {
-                if (!audioLoaded) {
-                    console.log('音频加载超时');
-                    showAudioStatus('音乐加载较慢，请稍后点击播放', 'info');
-                }
-            }, 3000);
-        }
-
-        // 更新音乐UI
-        function updateMusicUI(isPlaying) {
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const musicSubtitle = document.getElementById('musicSubtitle');
-            const musicPlayer = document.getElementById('musicPlayer');
-
-            if (isPlaying) {
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                musicSubtitle.textContent = "正在播放";
-                musicPlayer.style.background = "rgba(230, 57, 70, 0.25)";
-            } else {
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                musicSubtitle.textContent = audioLoaded ? "点击播放" : "加载中...";
-                musicPlayer.style.background = "rgba(255, 255, 255, 0.15)";
-            }
-        }
-
-        // 播放音乐
-        function playMusic() {
-            if (!audio) {
-                console.error('音频元素未初始化');
-                showAudioStatus('音乐播放器未初始化', 'error');
-                return;
-            }
-
-            if (!audioLoaded) {
-                console.log('音频尚未加载完成，尝试重新加载');
-                showAudioStatus('正在加载音乐，请稍后...', 'info');
-
-                // 尝试重新加载
-                audio.load();
-
-                // 再次尝试播放
-                setTimeout(() => {
-                    if (audioLoaded) {
-                        safePlayAudio();
-                    } else {
-                        showAudioStatus('音乐加载失败，请点击重试', 'error');
-                    }
-                }, 1000);
-                return;
-            }
-
-            safePlayAudio();
-        }
-
-        // 安全的音频播放方法
-        function safePlayAudio() {
-            if (!audio || !audioLoaded) return;
-
-            // 标记用户已交互
-            userInteracted = true;
-
-            // 使用Promise处理播放
-            const playPromise = audio.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // 播放成功
-                    isAudioPlaying = true;
-                    updateMusicUI(true);
-                    showAudioStatus('音乐播放中 🎵', 'success');
-                }).catch(error => {
-                    // 播放失败
-                    console.error('播放失败:', error);
-
-                    if (error.name === 'NotAllowedError') {
-                        showAudioStatus('请点击页面任意位置后重试播放', 'info');
-                    } else {
-                        showAudioStatus('播放失败: ' + error.message, 'error');
-                    }
-
-                    isAudioPlaying = false;
-                    updateMusicUI(false);
-                });
-            }
-        }
-
-        // 暂停音乐
-        function pauseMusic() {
-            if (audio && isAudioPlaying) {
-                audio.pause();
-                isAudioPlaying = false;
-                updateMusicUI(false);
-            }
-        }
-
-        // 切换音乐播放状态
-        function toggleMusic() {
-            if (!userInteracted) {
-                // 第一次点击，先标记用户已交互
-                userInteracted = true;
-                document.body.classList.add('user-interacted');
-            }
-
-            if (isAudioPlaying) {
-                pauseMusic();
-            } else {
-                playMusic();
-            }
-        }
-
-        // 图片加载处理
-        function loadNameImages() {
-            const inviterImage = document.getElementById('inviterImage');
-            const inviteeImage = document.getElementById('inviteeImage');
-            const inviterPlaceholder = document.getElementById('inviterPlaceholder');
-            const inviteePlaceholder = document.getElementById('inviteePlaceholder');
-
-            // 邀请人图片加载
-            inviterImage.onload = function () {
-                this.style.display = 'block';
-                inviterPlaceholder.style.display = 'none';
-            };
-
-            inviterImage.onerror = function () {
-                console.log('邀请人图片加载失败，显示占位符');
-                // 图片加载失败时，显示占位符
-                inviterPlaceholder.style.display = 'flex';
-            };
-
-            // 被邀请人图片加载
-            inviteeImage.onload = function () {
-                this.style.display = 'block';
-                inviteePlaceholder.style.display = 'none';
-            };
-
-            inviteeImage.onerror = function () {
-                console.log('被邀请人图片加载失败，显示占位符');
-                // 图片加载失败时，显示占位符
-                inviteePlaceholder.style.display = 'flex';
-            };
-
-            // 尝试加载图片
-            inviterImage.src = '1.jpg';
-            inviteeImage.src = '2.jpg';
-        }
-
-
-        // 生成雪花
-        function createSnowflakes() {
-            const snowflakesContainer = document.getElementById('snowflakes');
-            const snowflakeCount = 50;
-
-            for (let i = 0; i < snowflakeCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-
-                // 随机大小
-                const size = Math.random() * 5 + 2;
-                snowflake.style.width = `${size}px`;
-                snowflake.style.height = `${size}px`;
-
-                // 随机位置
-                snowflake.style.left = `${Math.random() * 100}%`;
-                snowflake.style.top = `${Math.random() * 100}%`;
-
-                // 随机动画延迟和持续时间
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 10 + 10;
-                const opacity = Math.random() * 0.5 + 0.3;
-
-                snowflake.style.opacity = opacity;
-                snowflake.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-
-                snowflakesContainer.appendChild(snowflake);
-            }
-
-            // 添加雪花下落动画
-            if (!document.querySelector('#snowflake-animation')) {
-                const style = document.createElement('style');
-                style.id = 'snowflake-animation';
-                style.innerHTML = `
-                    @keyframes fall {
-                        0% {
-                            transform: translateY(-100px) translateX(0) rotate(0deg);
-                            opacity: 0.8;
-                        }
-                        100% {
-                            transform: translateY(100vh) translateX(${Math.random() * 100 - 50}px) rotate(360deg);
-                            opacity: 0;
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        }
-
-        // 生成星星
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 30;
-
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-
-                // 随机大小
-                const size = Math.random() * 3 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-
-                // 随机位置
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-
-                // 随机闪烁延迟
-                const delay = Math.random() * 3;
-                star.style.animationDelay = `${delay}s`;
-
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // 更新步骤指示器
-        function updateStepIndicator(step) {
-            stepDots.forEach((dot, index) => {
-                if (index + 1 === step) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-
-        // 滚动到指定步骤
-        function scrollToStep(step) {
-            if (isScrolling) return;
-
-            isScrolling = true;
-
-            const targetStep = document.getElementById(`step${step}`);
-            if (targetStep) {
-                // 使用scrollIntoView实现平滑滚动
-                targetStep.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-
-                currentStep = step;
-                updateStepIndicator(step);
-
-                // 激活当前步骤的动画
-                setTimeout(() => {
-                    targetStep.classList.add('active');
-                }, 300);
-
-                // 隐藏滚动提示当到达最后一步
-                if (step === 5) {
-                    scrollHint.style.display = 'none';
-                }
-            }
-
-            setTimeout(() => {
-                isScrolling = false;
-            }, 800);
-        }
-
-        // 处理步骤指示器点击
-        stepDots.forEach(dot => {
-            dot.addEventListener('click', function () {
-                const step = parseInt(this.getAttribute('data-step'));
-                scrollToStep(step);
-            });
+        // 初始化圆点
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
         });
 
-        // 触摸滑动事件（移动端）
-        let touchStartY = 0;
-        let touchStartTime = 0;
+        const dots = document.querySelectorAll('.dot');
 
-        document.addEventListener('touchstart', function (e) {
-            touchStartY = e.touches[0].clientY;
-            touchStartTime = Date.now();
-            userInteracted = true; // 标记用户已交互
-            document.body.classList.add('user-interacted');
-        }, { passive: true });
-
-        document.addEventListener('touchend', function (e) {
-            if (isScrolling) return;
-
-            const touchEndY = e.changedTouches[0].clientY;
-            const touchEndTime = Date.now();
-            const diff = touchStartY - touchEndY;
-            const timeDiff = touchEndTime - touchStartTime;
-
-            // 滑动距离大于50px且时间小于300ms才触发
-            if (Math.abs(diff) > 50 && timeDiff < 300) {
-                // 向下滑动
-                if (diff > 0 && currentStep < 5) {
-                    scrollToStep(currentStep + 1);
-                }
-                // 向上滑动
-                else if (diff < 0 && currentStep > 1) {
-                    scrollToStep(currentStep - 1);
-                }
-            }
-        }, { passive: true });
-
-        // 拒绝按钮点击处理
-        document.getElementById('rejectBtn').addEventListener('click', function () {
-            const messages = [
-                "哦不！圣诞节不能拒绝邀请哦！🎄",
-                "圣诞精灵说这个按钮暂时不可用！🧚",
-                "平安夜需要一点奇迹...再试一次？🌟",
-                "叮叮当！拒绝功能已被圣诞老人禁用！🎅",
-                "圣诞魔法让你无法拒绝这个邀请！✨",
-                "听！铃儿响叮当在说：接受邀请吧！🔔",
-                "圣诞节没有拒绝，只有接受和...接受！🎁",
-                "驯鹿们说他们只接受肯定的答复！🦌"
-            ];
-
-            // 随机选择一条消息
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-            // 显示临时消息
-            const originalText = this.innerHTML;
-            this.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${randomMessage}`;
-
-            // 添加抖动效果
-            this.classList.add('shake');
-
-            // 随机移动按钮位置
-            const maxX = 20;
-            const maxY = 10;
-            const randomX = Math.floor(Math.random() * (maxX * 2)) - maxX;
-            const randomY = Math.floor(Math.random() * (maxY * 2)) - maxY;
-
-            this.style.transform = `translate(${randomX}px, ${randomY}px) scale(1.05)`;
-
-            // 3秒后恢复原状
-            setTimeout(() => {
-                this.classList.remove('shake');
-                this.style.transform = '';
-                this.innerHTML = originalText;
-            }, 3000);
-        });
-
-        // 接受按钮点击处理
-        document.getElementById('acceptBtn').addEventListener('click', function () {
-            // 显示第六步
-            document.getElementById('step6').style.display = 'flex';
-
-            // 滚动到第六步
-            setTimeout(() => {
-                document.getElementById('step6').classList.add('active');
-                scrollToStep(6);
-
-                // 更新第六步内容
-                const responseTitle = document.getElementById('responseTitle');
-                const responseText = document.getElementById('responseText');
-                const celebrationEmoji = document.getElementById('celebrationEmoji');
-
-                responseTitle.textContent = "太棒了！🎉";
-                celebrationEmoji.innerHTML = "🎄❤️🎁✨🎅🤶🌟";
-
-                // 创建庆祝特效
-                createCelebration();
-
-                // 尝试播放音乐作为庆祝
-                if (!isAudioPlaying && audioLoaded) {
-                    setTimeout(() => {
-                        playMusic();
-                    }, 500);
-                }
-
-                // 更改音乐播放器样式以庆祝
-                const musicPlayer = document.getElementById('musicPlayer');
-                const musicTitle = document.getElementById('musicTitle');
-                const musicSubtitle = document.getElementById('musicSubtitle');
-
-                musicPlayer.style.background = "rgba(42, 157, 143, 0.3)";
-                musicPlayer.style.boxShadow = "0 5px 20px rgba(42, 157, 143, 0.4)";
-                musicTitle.textContent = "庆祝音乐！";
-                musicSubtitle.textContent = "她接受了邀请！";
-            }, 500);
-
-            // 禁用按钮
-            this.disabled = true;
-            this.innerHTML = '<i class="fas fa-check"></i> 已接受邀请！';
-            this.style.background = 'linear-gradient(135deg, #2a9d8f, #1a936f)';
-
-            // 禁用拒绝按钮
-            const rejectBtn = document.getElementById('rejectBtn');
-            rejectBtn.disabled = true;
-            rejectBtn.innerHTML = '<i class="fas fa-lock"></i> 已锁定';
-            rejectBtn.style.background = 'linear-gradient(135deg, #6c757d, #495057)';
-            rejectBtn.style.cursor = 'not-allowed';
-        });
-
-        // 创建庆祝特效
-        function createCelebration() {
-            const container = document.querySelector('body');
-
-            // 创建心形和星星
-            for (let i = 0; i < 20; i++) {
-                const celebration = document.createElement('div');
-                celebration.innerHTML = i % 3 === 0 ? '❤️' : (i % 3 === 1 ? '✨' : '🎉');
-                celebration.style.position = 'fixed';
-                celebration.style.fontSize = '24px';
-                celebration.style.zIndex = '100';
-                celebration.style.left = `${Math.random() * 100}%`;
-                celebration.style.top = `${Math.random() * 100}%`;
-                celebration.style.opacity = '0';
-                celebration.style.pointerEvents = 'none';
-
-                container.appendChild(celebration);
-
-                // 随机动画
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 100 + Math.random() * 100;
-                const duration = 1 + Math.random() * 1.5;
-                const startX = Math.random() * 100;
-                const startY = Math.random() * 100;
-
-                // 动画关键帧
-                const keyframes = [
-                    {
-                        transform: `translate(${startX}vw, ${startY}vh) scale(0) rotate(0deg)`,
-                        opacity: 1
-                    },
-                    {
-                        transform: `translate(
-                            calc(${startX}vw + ${Math.cos(angle) * distance}px),
-                            calc(${startY}vh + ${Math.sin(angle) * distance}px)
-                        ) scale(1) rotate(${360}deg)`,
-                        opacity: 0
-                    }
-                ];
-
-                const timing = {
-                    duration: duration * 1000,
-                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
-                };
-
-                celebration.animate(keyframes, timing).onfinish = () => {
-                    celebration.remove();
-                };
-            }
+        function updateSlide() {
+            container.style.transform = `translateX(-${currentIndex * 100}vw)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
         }
 
-        // 初始化页面
-        window.addEventListener('DOMContentLoaded', () => {
-            // 隐藏加载动画
-            setTimeout(() => {
-                document.getElementById('loading').classList.add('hidden');
-                setTimeout(() => {
-                    document.getElementById('loading').style.display = 'none';
-                }, 500);
-            }, 1500);
-
-            // 初始化特效和音乐
-            createSnowflakes();
-            createStars();
-            initAudio();
-
-            // 确保第一步是激活状态
-            document.getElementById('step1').classList.add('active');
-
-            // 设置音乐控制按钮事件
-            document.getElementById('playPauseBtn').addEventListener('click', toggleMusic);
-
-            // 页面点击事件，用于触发音频播放
-            document.addEventListener('click', function () {
-                userInteracted = true;
-                document.body.classList.add('user-interacted');
-            });
-
-            // 添加scroll事件监听器，用于检测滚动到各个步骤
-            let scrollTimeout;
-            window.addEventListener('scroll', function () {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(function () {
-                    const scrollPosition = window.scrollY;
-                    const windowHeight = window.innerHeight;
-
-                    // 检查每个步骤是否在视口中
-                    steps.forEach((step, index) => {
-                        const stepTop = step.offsetTop;
-                        const stepHeight = step.offsetHeight;
-
-                        if (scrollPosition >= stepTop - windowHeight / 2 &&
-                            scrollPosition < stepTop + stepHeight - windowHeight / 2) {
-                            const stepNumber = index + 1;
-                            if (currentStep !== stepNumber) {
-                                currentStep = stepNumber;
-                                updateStepIndicator(stepNumber);
-
-                                // 激活当前步骤
-                                step.classList.add('active');
-
-                                // 隐藏滚动提示当到达最后一步
-                                if (stepNumber === 5) {
-                                    scrollHint.style.display = 'none';
-                                }
-                            }
-                        }
-                    });
-                }, 100);
-            }, { passive: true });
-
-            // 页面完全加载后尝试预加载音频
-            window.addEventListener('load', function () {
-                console.log('页面完全加载，音频状态:', audioLoaded);
-                if (!audioLoaded) {
-                    showAudioStatus('音乐加载完成，可以点击播放', 'info');
-                }
-            });
-         
-            loadNameImages();
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentIndex < slides.length - 1) {
+                currentIndex++;
+                updateSlide();
+            }
         });
 
-        // 防止页面下拉刷新（iOS）
-        document.body.addEventListener('touchmove', function (e) {
-            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                return;
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlide();
             }
-            e.preventDefault();
-        }, { passive: false });
+        });
+
+        // 支持键盘翻页
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentIndex < slides.length - 1) { currentIndex++; updateSlide(); }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentIndex > 0) { currentIndex--; updateSlide(); }
+            }
+        });
     </script>
 </body>
-
 </html>
