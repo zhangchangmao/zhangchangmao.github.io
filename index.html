@@ -1,251 +1,291 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Skills 公司内部分享会</title>
+    <title>Agent Skills 分享会</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --bg-color: #f4f7f9;
-            --text-color: #2c3e50;
+            --bg: #ffffff;
+            --text: #111111;
+            --accent: #007aff;
+            --gray: #f5f5f7;
         }
-        body, html {
-            margin: 0; padding: 0; height: 100%; overflow: hidden;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg-color); color: var(--text-color);
-        }
-        .slides-container {
-            width: 100vw; height: 100vh; display: flex;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .slide {
-            min-width: 100vw; height: 100vh; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-            padding: 40px; box-sizing: border-box; position: relative;
-        }
-        .content-box {
-            background: white; width: 85%; max-width: 1000px; height: 80%;
-            padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; overflow-y: auto;
-        }
-        h1 { font-size: 2.5em; color: var(--primary-color); border-bottom: 3px solid var(--primary-color); padding-bottom: 10px; margin-top: 0; }
-        h2 { font-size: 1.8em; color: #34495e; margin-bottom: 20px; }
-        p, li { font-size: 1.2em; line-height: 1.6; }
-        .highlight { color: #e67e22; font-weight: bold; }
-        
-        /* 图片展示区域模拟 */
-        .img-display {
-            background: #f9f9f9; border: 2px dashed #bdc3c7; border-radius: 10px;
-            margin: 20px 0; display: flex; justify-content: center; align-items: center;
-            flex-grow: 1; position: relative; overflow: hidden;
-        }
-        .img-placeholder-text { color: #95a5a6; font-style: italic; text-align: center; padding: 20px; }
-        
-        /* 导航按钮 */
-        .nav-btn {
-            position: fixed; top: 50%; transform: translateY(-50%);
-            background: rgba(52, 152, 219, 0.7); color: white; border: none;
-            padding: 20px; cursor: pointer; border-radius: 50%; font-size: 24px;
-            transition: background 0.3s; z-index: 100;
-        }
-        .nav-btn:hover { background: rgba(52, 152, 219, 1); }
-        #prevBtn { left: 20px; }
-        #nextBtn { right: 20px; }
-        .progress-dots {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px;
-        }
-        .dot { width: 12px; height: 12px; background: #bdc3c7; border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: var(--primary-color); transform: scale(1.3); }
 
-        /* 特殊布局 */
-        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, "SF Pro SC", "HanHei SC", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .slider {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        p,
+        li {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 内容布局 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            max-width: 1100px;
+            align-items: start;
+        }
+
+        .info-card {
+            background: var(--gray);
+            padding: 30px;
+            border-radius: 18px;
+            width: 100%;
+        }
+
+        /* 导航 */
+        .nav {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--text);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .nav-btn:hover {
+            opacity: 1;
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        /* ☆ 修改：合并并修正了对比图样式，确保其作为独立类可用 */
+        .comparison {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 60px;
+            margin-top: 30px;
+            width: 100%;
+            flex-wrap: nowrap;
+            overflow: visible;
+            min-width: calc(500px * 2 + 60px);
+        }
+
+        .enlarged-image {
+            width: 500px;
+            height: 350px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        /* ☆ 新增：为“核心解析”部分的配图添加样式 */
+        .core-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
 
-    <button class="nav-btn" id="prevBtn">❮</button>
-    <button class="nav-btn" id="nextBtn">❯</button>
+    <div class="progress" id="progress"></div>
+    <div class="nav">
+        <button class="nav-btn" onclick="move(-1)">←</button>
+        <button class="nav-btn" onclick="move(1)">→</button>
+    </div>
 
-    <div class="slides-container" id="slidesContainer">
-        
-        <!-- 第 1 页：封面 -->
+    <div class="slider" id="slider">
+
+        <!-- P1: 大标题 -->
         <section class="slide">
-            <div class="content-box">
-                <div style="text-align: center; margin-top: 50px;">
-                    <h1>Agent Skills</h1>
-                    <h2>一种全新的工作和学习方式</h2>
-                    <p style="margin-top: 40px;">讲师：[您的姓名] | 公司内部分享会</p>
-                    <div class="img-display" style="height: 200px;">
-                        <p class="img-placeholder-text">【图示：大模型图标与各种工具文件夹连接的背景图 [1]】</p>
-                    </div>
+            <h1>Agent Skills</h1>
+            <h2 style="margin-top: 1rem; color: #888;">一种全新的工作和学习方式</h2>
+        </section>
+
+        <!-- P2: 对比评价 -->
+        <section class="slide">
+            <h2>哪个写得更好？</h2>
+            <div class="comparison">
+                <img src="./tz1.png" alt="描述文字1" class="enlarged-image">
+                <img src="./tz2.png" alt="描述文字2" class="enlarged-image">
+            </div>
+        </section>
+
+        <section class="slide">
+            <h2>哪个更漂亮？</h2>
+            <div class="comparison">
+                <img src="./日出1.png" alt="描述文字1" class="enlarged-image">
+                <img src="./日出2.png" alt="描述文字2" class="enlarged-image">
+            </div>
+        </section>
+
+        <!-- P3: 深度介绍 (修改后) -->
+        <section class="slide">
+            <div class="content-grid">
+                <div>
+                    <h2>核心解析</h2>
+                    <p><span class="highlight">背景：</span> 通用大模型在特定领域不够专业，且处理复杂任务时十分困难。Skills 充当了“桥梁”，将人类经验、知识和流程进行封装</p>
+                    <p><span class="highlight">原理：</span> 采用 <strong>Agent + Skills + Computer</strong>
+                        架构。智能体在虚拟环境中通过“使用计算机”的能力，自动读取并运行文件系统中的技能脚本。</p>
+                    <p><span class="highlight">结构：</span> 每个 Skill 文件夹包含一个核心
+                        <strong>SKILL.md</strong>（定义流程与描述）以及存放示例、模板和代码的资源文件夹。
+                    </p>
+                </div>
+                <div class="info-card">
+                    <img src=".\1.png" width="50%" class="core-image">
                 </div>
             </div>
         </section>
 
-        <!-- 第 2 页：产生背景与解决的问题 -->
+        <!-- ☆ 修改后：P4 - Skills vs. MCP 单独一页，左右并排对比 -->
         <section class="slide">
-            <div class="content-box">
-                <h1>1. 产生背景：为什么要使用 Skills？</h1>
-                <div class="split">
-                    <div>
-                        <p><strong>大模型现状：</strong></p>
-                        <ul>
-                            <li><span class="highlight">特定领域不专：</span> 通用模型难以理解公司内部的深度业务逻辑 [1]。</li>
-                            <li><span class="highlight">复杂任务困难：</span> 面对需要多步骤、跨工具的长链路任务时力不从心 [1]。</li>
-                        </ul>
-                        <p><strong>解决的核心问题：</strong></p>
-                        <p>Skills 作为“桥梁”，能够将<strong>封装经验知识</strong>转化为 AI 可直接运行的流程，实现<strong>按需自动使用</strong> [1]。</p>
-                    </div>
-                    <div class="img-display">
-                        <p class="img-placeholder-text"></p>
-						<img src = ".\1.png" />
-                    </div>
+            <h2>Skills vs. MCP</h2>
+            <div class="content-grid">
+                <!-- 左侧：Skills -->
+                <div class="info-card">
+                    <h3>Skills 技能</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>定位：</strong> 知识共享与流程封装。</li>
+                        <li><strong>形式：</strong> 基于 Markdown，结构简单，人人可创。</li>
+                        <li><strong>核心优势：</strong> <span class="highlight">节省 Token</span>，复用性强，易于传播。</li>
+                        <li><strong>适用场景：</strong> 固化经验、标准化操作、最佳实践共享。</li>
+                        
+                    </ul>
                 </div>
+                <!-- 右侧：MCP -->
+                <div class="info-card">
+                    <h3>MCP (Model Context Protocol)</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>定位：</strong> 功能扩展与外部集成。</li>
+                        <li><strong>形式：</strong> 侧重连接API、数据库或特定工具，配置相对复杂。</li>
+                        <li><strong>核心优势：</strong> 突破模型边界，访问实时/私有数据，执行具体操作。</li>
+                        <li><strong>适用场景：</strong> 需要与外部系统交互、获取实时信息的任务。</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 40px; text-align: center; font-size: 1.1rem; max-width: 800px;">
+                <span class="highlight">结论：</span> Skills 与 MCP 是<strong>互补共生</strong>的协作关系。Skills 负责封装“怎么做”的知识，MCP
+                负责提供“连接什么”的能力。
+            </p>
+        </section>
+
+        <!-- P5: 操作演示与工具 (原P4序号顺延) -->
+        <section class="slide">
+            <div class="info-card">
+                <h2>资源与演示</h2>
+                <p><span class="highlight">官方 Skills 库：</span></p>
+                <p style="font-size: 1rem;">GitHub: <code>anthropics/skills</code> (5.4万+ Star)<br>
+                    涵盖 PDF 处理、PPTX 分析、数据编辑等官方标准技能。</p>
+                <p><span class="highlight">工具推荐：</span></p>
+                <p style="font-size: 1rem;"><strong>Skills Market:</strong> <code>skillsmp.com/zh</code><br>
+                    快速发现并管理各类自定义技能。</p>
             </div>
         </section>
 
-        <!-- 第 3 页：基本原理：Agent + Skills + Computer -->
         <section class="slide">
-            <div class="content-box">
-                <h1>2. 基本原理：三位一体架构</h1>
-                <p>Agent Skills 的运行逻辑是基于 **Agent + Skills + Computer** 的深度协作：</p>
-                <div class="img-display" style="max-height: 350px;">
-                    <p class="img-placeholder-text">【图示：左侧为 Agent configuration (含核心 Prompt)，右侧为 Agent virtual machine，中间通过 "use computer" 指令连接文件系统中的 Skills 目录 [1]】</p>
-                </div>
-                <ul>
-                    <li><strong>Agent 配置：</strong> 在 System Prompt 中装备技能列表（如 pdf, docx, xlsx）[1]。</li>
-                    <li><strong>运行环境：</strong> 智能体通过 Bash、Python 或 Nodejs 在虚拟运行环境中读取并运行技能脚本 [1]。</li>
+            <div class="info-card">
+                <h2>自定义 Skills 案例</h2>
+                <ul style="line-height: 2;">
+                    <li><strong>代码核查：</strong> 自定义核查要求</li>
+                    <li><strong>字幕校对：</strong> 自动纠正识别错误，统一术语。</li>
+                    <li><strong>文章风格优化：</strong> 修正“AI味”，改写成自媒体风格。</li>
+                    <li><strong>其他：</strong> 代码审查、著作权撰写、自动配图。</li>
                 </ul>
             </div>
         </section>
-
-        <!-- 第 4 页：Skill 的标准结构 -->
-        <section class="slide">
-            <div class="content-box">
-                <h1>3. Skill 的内部构造</h1>
-                <p>一个标准的 Skill 并不是一段杂乱的代码，而是一个<strong>结构化的文件夹</strong>：</p>
-                <div class="split">
-                    <div class="img-display">
-                        <p class="img-placeholder-text">【图示：SKILL 文件夹拆解图。左侧为 SKILL.md (含技能流程、文件说明)，右侧为辅助文件夹：examples, templates, scripts [1]】</p>
-                    </div>
-                    <div>
-                        <ul>
-                            <li><span class="highlight">SKILL.md：</span> 核心文档。定义了 `name` 和 `description`，告知 AI 何时调用该技能 [1]。</li>
-                            <li><span class="highlight">reference.md：</span> 作为索引，帮助 AI 快速检索背景信息，支持渐进式加载 [1]。</li>
-                            <li><span class="highlight">Scripts：</span> 实际运行的 Python 或脚本代码 [1]。</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第 5 页：Skills vs. MCP -->
-        <section class="slide">
-            <div class="content-box">
-                <h1>4. 核心区分：Skills vs. MCP</h1>
-                <p>Skills 和 MCP (Model Context Protocol) 解决的是本质不同的问题：</p>
-                <div class="img-display">
-                    <p class="img-placeholder-text">【图示：左侧 Skills 标注为“知识共享、简单 MD 文件、无需服务器”；右侧 MCP 标注为“功能扩展、需要编码、外部集成” [1]】</p>
-                </div>
-                <p><strong>核心观点：</strong> 两者是<span class="highlight">互补共生</span>的。Skills 分享知识经验，MCP 扩展外部集成，共同实现完美协作 [1]。</p>
-            </div>
-        </section>
-
-        <!-- 第 6 页：优缺点深度分析 -->
-        <section class="slide">
-            <div class="content-box">
-                <h1>5. 优缺点：硬币的两面</h1>
-                <div class="split">
-                    <div>
-                        <h2 style="color: #27ae60;">优势</h2>
-                        <ul>
-                            <li><span class="highlight">轻量灵活：</span> 基于 Markdown，人人可创。</li>
-                            <li><span class="highlight">渐进式加载：</span> 极大节省 Token 消耗 [1]。</li>
-                        </ul>
-                        <h2 style="color: #c0392b;">缺点与挑战</h2>
-                        <ul>
-                            <li><span class="highlight">上手门槛：</span> 终端 CLI 环境对普通用户有“劝退感” [1]。</li>
-                            <li><span class="highlight">路径不统一：</span> 不同工具（如 Cursor, Claude Code）存放路径各异 [1]。</li>
-                        </ul>
-                    </div>
-                    <div class="img-display">
-                        <p class="img-placeholder-text">【图示：用户面对 CLI 的困惑时刻 + 文件臃肿导致加载卡住的示意图 [1]】</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第 7 页：应用案例与答疑 -->
-        <section class="slide">
-            <div class="content-box">
-                <h1>6. 真实有用的案例展示</h1>
-                <div class="split">
-                    <ul>
-                        <li><span class="highlight">字幕校对 Skill：</span> 统一专业术语，修正语音识别错误 [1]。</li>
-                        <li><span class="highlight">小报童知识库：</span> 优先检索私有内容，提供精准问答 [1]。</li>
-                        <li><span class="highlight">风格优化工具：</span> 自动识别并修正“AI 味” [1]。</li>
-                        <li>其他：代码审查、著作权撰写、自动配图等 [1]。</li>
-                    </ul>
-                    <div class="img-display">
-                        <p class="img-placeholder-text">【图示：多个 Skill (如 video-downloader, style-optimizer) 在 IDE 中的目录截图 [1]】</p>
-                    </div>
-                </div>
-                <hr>
-                <h2 style="text-align: center;">Q&A：欢迎开麦提问！</h2>
-            </div>
-        </section>
-
     </div>
 
-    <div class="progress-dots" id="dotsContainer"></div>
-
     <script>
-        const container = document.getElementById('slidesContainer');
-        const slides = document.querySelectorAll('.slide');
-        const dotsContainer = document.getElementById('dotsContainer');
-        let currentIndex = 0;
+        let current = 0;
+        const slider = document.getElementById('slider');
+        const progress = document.getElementById('progress');
+        const total = 7;
 
-        // 初始化圆点
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if (i === 0) dot.classList.add('active');
-            dotsContainer.appendChild(dot);
-        });
-
-        const dots = document.querySelectorAll('.dot');
-
-        function updateSlide() {
-            container.style.transform = `translateX(-${currentIndex * 100}vw)`;
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentIndex);
-            });
+        function move(dir) {
+            current = Math.max(0, Math.min(total - 1, current + dir));
+            slider.style.transform = `translateX(-${current * 100}vw)`;
+            progress.style.width = `${((current + 1) / total) * 100}%`;
         }
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentIndex < slides.length - 1) {
-                currentIndex++;
-                updateSlide();
-            }
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlide();
-            }
-        });
-
-        // 支持键盘翻页
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                if (currentIndex < slides.length - 1) { currentIndex++; updateSlide(); }
-            } else if (e.key === 'ArrowLeft') {
-                if (currentIndex > 0) { currentIndex--; updateSlide(); }
-            }
+            if (e.key === 'ArrowRight') move(1);
+            if (e.key === 'ArrowLeft') move(-1);
         });
     </script>
 </body>
+
 </html>
