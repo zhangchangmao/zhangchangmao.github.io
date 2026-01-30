@@ -487,16 +487,16 @@
             <div style="display: flex; align-items: center; gap: 60px; max-width: 1100px;">
                 <div style="flex: 1;">
                     <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent);">
-                        <h3>Domain Knowledge Encapsulation</h3>
-                        <p style="font-size: 1.1rem; color: var(--text);">将专业知识、工作流程和最佳实践封装为可复用的 Skill Bundle，实现能力的模块化编排</p>
+                        <h3>专业知识封装</h3>
+                        <p style="font-size: 1.1rem; color: var(--text);">将专业知识、工作流程和最佳实践封装为可复用的技能包，实现能力的模块化编排</p>
                     </div>
                     <div class="card" style="margin-bottom: 20px;">
-                        <h3>Metadata & Directive</h3>
-                        <p><strong style="color: var(--accent);">SKILL.md</strong> — YAML Frontmatter 定义元数据，Markdown 主体承载指令规范</p>
+                        <h3>元数据与指令</h3>
+                        <p><strong style="color: var(--accent);">SKILL.md</strong> — YAML 元数据 + Markdown 指令规范</p>
                     </div>
                     <div class="card">
-                        <h3>Dynamic Resolution</h3>
-                        <p>运行时语义匹配 + 按需加载，实现 Context Window 的高效利用</p>
+                        <h3>动态加载</h3>
+                        <p>运行时语义匹配 + 按需加载，高效利用上下文窗口</p>
                     </div>
                 </div>
                 <div style="flex: 1;">
@@ -509,9 +509,8 @@
                         <pre style="color: #c9d1d9; margin: 0;">
 <span style="color: #7ee787;">---</span>
 <span style="color: #79c0ff;">name:</span> my-skill
-<span style="color: #79c0ff;">description:</span> Skill 描述
+<span style="color: #79c0ff;">description:</span> 技能描述
 <span style="color: #79c0ff;">version:</span> 1.0.0
-<span style="color: #79c0ff;">trigger:</span> 触发模式
 <span style="color: #7ee787;">---</span>
 
 <span style="color: #ff7b72;"># 技能名称</span>
@@ -537,7 +536,7 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                             <span style="background: #444; padding: 8px 12px; border-radius: 8px;">2</span>
-                            <span>依赖通用知识 (LLM)</span>
+                            <span>依赖通用知识</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                             <span style="background: #444; padding: 8px 12px; border-radius: 8px;">3</span>
@@ -554,27 +553,27 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                             <span style="background: var(--accent); padding: 8px 12px; border-radius: 8px;">2</span>
-                            <span>动态匹配 Skill (Semantic Match)</span>
+                            <span>动态匹配 Skill</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                             <span style="background: var(--accent); padding: 8px 12px; border-radius: 8px;">3</span>
-                            <span>上下文注入 (Context Injection)</span>
+                            <span>注入专业知识</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span style="background: var(--accent); padding: 8px 12px; border-radius: 8px;">4</span>
-                            <span style="color: #7ee787;">确定性输出</span>
+                            <span style="color: #7ee787;">高质量输出</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div style="margin-top: 30px; padding: 20px; background: rgba(233, 69, 96, 0.1); border-radius: 12px; border-left: 4px solid var(--accent);">
-                <p style="font-size: 1rem;"><strong style="color: var(--accent);">Progressive Disclosure</strong> — 按需渐进式加载专业知识，避免上下文膨胀，提升推理效率</p>
+                <p style="font-size: 1rem;"><strong style="color: var(--accent);">渐进式披露 (Progressive Disclosure)</strong> — 按需加载专业知识，避免上下文膨胀，提升推理效率</p>
             </div>
         </div>
 
         <!-- Slide 6: Skills 文件夹结构 -->
         <div class="slide">
-            <h2>Skill Bundle Architecture</h2>
+            <h2>Skill 文件夹结构</h2>
             <div style="display: flex; gap: 40px; max-width: 1100px; align-items: flex-start;">
                 <div style="flex: 0 0 300px;">
                     <div class="demo-container" style="font-size: 13px;">
@@ -585,9 +584,9 @@
                         </div>
                         <pre style="color: #c9d1d9; margin: 0;">
 <span style="color: #79c0ff;">skill-name/</span>
-├── <span style="color: #7ee787;">SKILL.md</span>      <span style="color: #6e7681;"># 主配置</span>
+├── <span style="color: #7ee787;">SKILL.md</span>      <span style="color: #6e7681;"># 核心文件</span>
 ├── <span style="color: #ff7b72;">scripts/</span>
-│   ├── <span style="color: #79c0ff;">main.py</span>    <span style="color: #6e7681;"># 入口</span>
+│   ├── <span style="color: #79c0ff;">main.py</span>    <span style="color: #6e7681;"># 入口脚本</span>
 │   └── utils.py
 ├── <span style="color: #ff7b72;">templates/</span>
 │   └── output.tpl
@@ -597,20 +596,20 @@
                 </div>
                 <div style="flex: 1;">
                     <div class="card" style="margin-bottom: 15px; padding: 20px; border-left: 4px solid var(--accent);">
-                        <h3 style="font-size: 1.1rem;">SKILL.md — Directive Entry Point</h3>
-                        <p style="font-size: 0.9rem;">YAML Frontmatter 定义元数据，Markdown Body 承载指令规范、使用场景和约束条件</p>
+                        <h3 style="font-size: 1.1rem;">SKILL.md — 核心配置</h3>
+                        <p style="font-size: 0.9rem;">YAML 元数据定义 + Markdown 指令规范、使用场景和约束条件</p>
                     </div>
                     <div class="card" style="margin-bottom: 15px; padding: 20px;">
-                        <h3 style="font-size: 1.1rem;">scripts/ — Tool Integration</h3>
-                        <p style="font-size: 0.9rem;">封装可执行逻辑，通过 Tool Calling 机制扩展 AI 能力边界</p>
+                        <h3 style="font-size: 1.1rem;">scripts/ — 工具集成</h3>
+                        <p style="font-size: 0.9rem;">封装可执行逻辑，通过工具调用机制扩展 AI 能力边界</p>
                     </div>
                     <div class="card" style="margin-bottom: 15px; padding: 20px;">
-                        <h3 style="font-size: 1.1rem;">templates/ — Output Scaffolding</h3>
-                        <p style="font-size: 0.9rem;">预定义输出模板，确保格式一致性 (Format Enforcement)</p>
+                        <h3 style="font-size: 1.1rem;">templates/ — 输出模板</h3>
+                        <p style="font-size: 0.9rem;">预定义输出模板，确保格式一致性</p>
                     </div>
                     <div class="card" style="padding: 20px;">
-                        <h3 style="font-size: 1.1rem;">resources/ — Static Assets</h3>
-                        <p style="font-size: 0.9rem;">配置数据、Schema 定义、示例代码等静态资源</p>
+                        <h3 style="font-size: 1.1rem;">resources/ — 静态资源</h3>
+                        <p style="font-size: 0.9rem;">配置数据、Schema 定义、示例代码等资源文件</p>
                     </div>
                 </div>
             </div>
@@ -627,32 +626,32 @@
                 </div>
                 <div class="comparison-row">
                     <div class="comparison-cell comparison-label">抽象层级</div>
-                    <div class="comparison-cell">Knowledge Layer<br>(Know-how)</div>
-                    <div class="comparison-cell">Integration Layer<br>(Capability)</div>
+                    <div class="comparison-cell">知识层<br>告诉 AI 怎么做</div>
+                    <div class="comparison-cell">集成层<br>让 AI 能做什么</div>
                 </div>
                 <div class="comparison-row">
                     <div class="comparison-cell comparison-label">核心能力</div>
-                    <div class="comparison-cell">Directive Injection<br>指令注入</div>
-                    <div class="comparison-cell">Tool Calling<br>工具调用</div>
+                    <div class="comparison-cell">指令注入<br>注入专业知识</div>
+                    <div class="comparison-cell">工具调用<br>连接外部服务</div>
                 </div>
                 <div class="comparison-row">
                     <div class="comparison-cell comparison-label">实现方式</div>
-                    <div class="comparison-cell">Declarative<br>声明式配置</div>
-                    <div class="comparison-cell">Procedural<br>过程式服务</div>
+                    <div class="comparison-cell">声明式配置<br>静态文件</div>
+                    <div class="comparison-cell">过程式服务<br>运行时连接</div>
                 </div>
                 <div class="comparison-row">
                     <div class="comparison-cell comparison-label">部署模型</div>
-                    <div class="comparison-cell">Static Bundle<br>静态包</div>
-                    <div class="comparison-cell">Runtime Service<br>运行时服务</div>
+                    <div class="comparison-cell">静态包<br>即插即用</div>
+                    <div class="comparison-cell">运行服务<br>需要启动服务</div>
                 </div>
                 <div class="comparison-row">
-                    <div class="comparison-cell comparison-label">Use Case</div>
-                    <div class="comparison-cell">Brand Guidelines<br>工作流规范</div>
-                    <div class="comparison-cell">Database/API<br>外部集成</div>
+                    <div class="comparison-cell comparison-label">典型场景</div>
+                    <div class="comparison-cell">品牌规范<br>工作流规范</div>
+                    <div class="comparison-cell">数据库<br>API 集成</div>
                 </div>
             </div>
             <div style="margin-top: 25px; padding: 15px 20px; background: rgba(126, 231, 135, 0.1); border-radius: 8px; border-left: 4px solid #7ee787;">
-                <p style="font-size: 0.95rem; color: #7ee787;">Complementary Stack: Skills 封装专业知识，MCP 暴露外部能力，两者协同构建完整的 Agent 能力图谱</p>
+                <p style="font-size: 0.95rem; color: #7ee787;">互补组合：Skills 封装专业知识，MCP 暴露外部能力，两者协同构建完整的 Agent 能力体系</p>
             </div>
         </div>
 
@@ -726,28 +725,28 @@
 
         <!-- Slide 9: skill-creator 介绍 -->
         <div class="slide">
-            <h2>skill-creator: Meta-Skill for Skill Authoring</h2>
+            <h2>skill-creator: 元技能创作工具</h2>
             <div style="display: flex; gap: 40px; max-width: 1100px; align-items: flex-start;">
                 <div style="flex: 1;">
                     <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent);">
-                        <h3>Recursive Skill Design</h3>
-                        <p>使用 skill-creator 元技能自动化 Skill 创作流程，降低 DSL (Domain Specific Language) 学习成本</p>
+                        <h3>自动化技能创作</h3>
+                        <p>使用 skill-creator 元技能自动化 Skill 创作流程，降低领域专用语言的学习成本</p>
                     </div>
                     <div class="card" style="margin-bottom: 20px;">
-                        <h3>Core Capabilities</h3>
+                        <h3>核心能力</h3>
                         <p>
-                        <span style="color: #7ee787;">→</span> Guided Scaffolding<br>
-                        <span style="color: #7ee787;">→</span> Auto-generated Metadata<br>
-                        <span style="color: #7ee787;">→</span> Best Practice Enforcement<br>
-                        <span style="color: #7ee787;">→</span> Schema Validation
+                        <span style="color: #7ee787;">→</span> 引导式脚手架<br>
+                        <span style="color: #7ee787;">→</span> 自动生成元数据<br>
+                        <span style="color: #7ee787;">→</span> 最佳实践检查<br>
+                        <span style="color: #7ee787;">→</span> 结构验证
                         </p>
                     </div>
                     <div class="card">
-                        <h3>Application Scenarios</h3>
+                        <h3>应用场景</h3>
                         <p>
-                        <span style="color: #ff6b6b;">Enterprise</span> — 定制工作流标准化<br>
-                        <span style="color: #ffbd2e;">Team</span> — 知识资产沉淀<br>
-                        <span style="color: #79c0ff;">Personal</span> — 效率工具封装
+                        <span style="color: #ff6b6b;">企业</span> — 定制工作流标准化<br>
+                        <span style="color: #ffbd2e;">团队</span> — 知识资产沉淀<br>
+                        <span style="color: #79c0ff;">个人</span> — 效率工具封装
                         </p>
                     </div>
                 </div>
@@ -759,12 +758,12 @@
                             <div class="demo-dot green"></div>
                         </div>
                         <div class="demo-content">
-                            <p><span class="prompt">></span> Use skill-creator to scaffold code-review</p>
+                            <p><span class="prompt">></span> 使用 skill-creator 创建代码审查技能</p>
                             <br>
-                            <p><span class="output">⚡ Invoking skill-creator...</span></p>
-                            <p><span class="comment"># Extracting patterns from context</span></p>
-                            <p><span class="output">✓ Generated SKILL.md with best practices</p>
-                            <p><span class="output">✓ code-review/SKILL.md created</span></p>
+                            <p><span class="output">⚡ 正在调用 skill-creator...</span></p>
+                            <p><span class="comment"># 从上下文中提取模式</span></p>
+                            <p><span class="output">✓ 已按最佳实践生成 SKILL.md</span></p>
+                            <p><span class="output">✓ code-review/SKILL.md 创建成功</span></p>
                         </div>
                     </div>
                 </div>
